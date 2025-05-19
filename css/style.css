@@ -1,7 +1,15 @@
-body, html {
+html, body {
   height: 100%;
   margin: 0;
   background-color: #ee9ca7;
+  width: 100%;
+  height: 100%;
+  scrollbar-width: none;
+  overflow: hidden;
+}
+
+body {
+  background: #ee9ca7;
 }
 
 .center-wrapper {
