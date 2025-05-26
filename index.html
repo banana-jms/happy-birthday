@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Text Fade Effect with Love Background</title>
+  <title>Happy Birthday, Mama!/title>
   <style>
     body {
       font-family: 'Courier New', Courier, monospace;
@@ -17,7 +17,7 @@
       text-align: center;
       padding-inline: 20px;
       padding-top: 20px;
-      padding-bottom: 60px; /* beri ruang untuk footer */
+      padding-bottom: 60px;
       overflow-x: hidden;
     }
 
@@ -70,12 +70,8 @@
     }
 
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
+      from { opacity: 0; }
+      to   { opacity: 1; }
     }
 
     .story-text {
@@ -117,7 +113,6 @@
       background-color: #4A102A;
     }
 
-    /* Footer sticky di bawah layar */
     .footer {
       position: fixed;
       bottom: 0;
@@ -131,13 +126,70 @@
       border-top: 1px solid #ccc;
       z-index: 2;
     }
+
+    /* Modal */
+    #volumeModal {
+      position: fixed;
+      z-index: 999;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    #volumeModal h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    #volumeModal button {
+      background-color: #CF0F47;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 5px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    #volumeModal button:hover {
+      background-color: #4A102A;
+    }
+
+    /* Tombol Ulangi Lagu */
+    #replay-btn {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.8);
+      border: none;
+      border-radius: 50%;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
   </style>
 </head>
 <body>
 
+  <!-- Modal -->
+  <div id="volumeModal">
+    <h2>Mama.. volumenya naikin dulu ya sebelum mulai 🎵</h2>
+    <button onclick="closeModal()">Okeey</button>
+  </div>
+
   <!-- Tombol Mulai -->
   <button id="start-btn" onclick="startStory()">Mulai</button>
 
+  <!-- Cerita -->
   <div class="story-frame" id="frame1">
     <div class="story-header">Once Upon a Time...</div>
     <img class="story-image" src="https://postimage.me/images/2025/05/24/WhatsApp-Image-2025-05-24-at-10.42.45-AM.jpeg" alt="Story Image 1">
@@ -164,7 +216,11 @@
     &copy; 2025 Zia & Papa.
   </footer>
 
-  <!-- JavaScript untuk cerita -->
+  <!-- Audio dan Tombol Ulangi -->
+  <audio id="bgm" src="cant_fall_in_love.mp3" preload="auto"></audio>
+  <button id="replay-btn" onclick="replayMusic()" title="Ulangi Lagu">🔁</button>
+
+  <!-- Script -->
   <script>
     const texts = [
       "Selamat datang di rumah saya, rumah ini merupakan peninggalan sejarah.",
@@ -195,16 +251,41 @@
       });
     }
 
-    function endStory() { 
-      window.location.href = "end.html"; // ganti dengan link tujuanmu
+    function endStory() {
+      const bgm = document.getElementById('bgm');
+      if (bgm) {
+        bgm.pause();
+        bgm.currentTime = 0;
+      }
+      window.location.href = "end.html";
     }
 
     function startStory() {
       document.getElementById('start-btn').style.display = 'none';
+      const bgm = document.getElementById('bgm');
+      if (bgm) {
+        bgm.currentTime = 0;
+        bgm.play().catch(e => {
+          console.log("Autoplay error:", e);
+        });
+      }
       nextFrame(1);
     }
 
-    // Efek love background
+    function closeModal() {
+      document.getElementById('volumeModal').style.display = 'none';
+    }
+
+    function replayMusic() {
+      const bgm = document.getElementById('bgm');
+      if (bgm) {
+        bgm.currentTime = 0;
+        bgm.play().catch(e => {
+          console.log("Replay gagal:", e);
+        });
+      }
+    }
+
     function createLove() {
       const love = document.createElement('div');
       love.classList.add('love');
